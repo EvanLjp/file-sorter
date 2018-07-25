@@ -1,0 +1,12 @@
+.vscode
+vendor
+
+file-sorter
+
+*.docx
+*.docx#
+
+*.tmp
+
+big.txt
+
