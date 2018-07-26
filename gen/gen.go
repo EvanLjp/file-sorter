@@ -34,7 +34,7 @@ func RandomTextFile(name string, sizeMB int) error {
 func RandomString(len int) string {
 	bytes := make([]byte, len)
 	for i := 0; i < len; i++ {
-		bytes[i] = byte(97 + rand.Intn(122-97)) // a=97 and z=122
+		bytes[i] = byte(97 + rand.Intn(26)) // a=97 and z=122
 	}
 	return string(bytes)
 }

@@ -8,9 +8,12 @@ import (
 	"tig.chaosgroup.com/candidates/bozhin.katsarski/util"
 )
 
+const defaultMaxBatchSizeB = 1e8 // 100MB
+
 // Sorter encapsulates the data needed for sorting a file
 type Sorter struct {
 	filename       string
+	maxBatchSizeB  int64
 	fileSizeBytes  int64
 	lines          int     // number of lines in the file
 	linesFirstByte []int64 // index of the first byte of each line
@@ -24,6 +27,7 @@ func New(filename string) (*Sorter, error) {
 
 	sorter := Sorter{
 		filename:       filename,
+		maxBatchSizeB:  defaultMaxBatchSizeB,
 		lines:          0,
 		linesFirstByte: make([]int64, 0),
 	}
@@ -37,6 +41,13 @@ func New(filename string) (*Sorter, error) {
 	sorter.indexLines()
 
 	return &sorter, nil
+}
+
+func (s *Sorter) MaxBatchSizeB(maxBatchSizeB int64) {
+	if maxBatchSizeB <= 0 {
+		panic(fmt.Errorf("max batch size should be positive"))
+	}
+	s.maxBatchSizeB = maxBatchSizeB
 }
 
 // indexLines reads the file line by line and indexes the first byte of each line

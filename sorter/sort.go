@@ -10,9 +10,7 @@ import (
 
 // Sort sorts the lines of the file by overwriting it
 func (s *Sorter) Sort() error {
-	maxBytesPerBatch := calcMaxBytesPerBatch(s.fileSizeBytes)
-
-	batchesCount, err := s.sortByBatches(maxBytesPerBatch)
+	batchesCount, err := s.sortByBatches(s.maxBatchSizeB)
 	if err != nil {
 		return fmt.Errorf("Sort: %s", err)
 	}
@@ -29,7 +27,7 @@ func (s *Sorter) Sort() error {
 // sortByBatches divides the file's lines into batches with a fixed maximum size
 // and in-memory sorts each batch into a temporary file. Returns number of batches used and error
 func (s *Sorter) sortByBatches(maxBytesPerBatch int64) (int, error) {
-	log.Printf("Sorting with max batch size %d bytes...", maxBytesPerBatch)
+	log.Printf("Sorting with max batch size %d bytes (%.2f MB)...", maxBytesPerBatch, float64(maxBytesPerBatch)*1.0e-6)
 
 	currentBatch := 0
 	fromLine := 0
@@ -54,8 +52,6 @@ func (s *Sorter) sortByBatches(maxBytesPerBatch int64) (int, error) {
 // into a new file with the given name.
 // It truncates the file if it already exists
 func (s *Sorter) sortBatchIntoFile(fromLine, toLine int, outputFile string) error {
-	log.Printf("Batch sorting bytes [%d, %d)...", s.firstByte(fromLine), s.lastByte(toLine-1))
-
 	file, err := os.Open(s.filename)
 	if err != nil {
 		return fmt.Errorf("sortBatchIntoFile: %s", err)
@@ -118,6 +114,7 @@ func (s *Sorter) mergeBatches(batchesCount int) error {
 	if err != nil {
 		return fmt.Errorf("mergeBatches: %s", err)
 	}
+	defer file.Close()
 
 	for {
 		minLineIndex := -1 // index of the scanner with the smallest line
@@ -162,6 +159,10 @@ func deleteTmpFiles(batchesCount int) {
 	}
 }
 
-func calcMaxBytesPerBatch(fileSize int64) int64 {
-	return 1e3 // TODO
+// calcMaxBytesPerBatch calculates the maximum number of bytes per batch
+// for when sorting a file of given size in bytes
+func calcMaxBytesPerBatch(fileSizeBytes int64) int64 {
+	const mb = 1e6
+
+	return 100 * mb
 }
