@@ -1,33 +1,44 @@
 package main
 
-// util.CreateRandomFile("big.txt", 3200000, 500)
-
 import (
-	"fmt"
-	"os"
+	"flag"
+
+	"tig.chaosgroup.com/candidates/bozhin.katsarski/gen"
 
 	"tig.chaosgroup.com/candidates/bozhin.katsarski/sorter"
 )
 
 func main() {
-	if len(os.Args) != 2 {
-		panic("Usage: file-sorter <text-file>")
+	filename, fileSizeMB := getFlags()
+
+	if fileSizeMB != 0 {
+		filename = "random-file.txt"
+		gen.RandomTextFile(filename, fileSizeMB)
 	}
 
-	filename := os.Args[1]
-	if _, err := os.Stat(filename); os.IsNotExist(err) {
-		panic(fmt.Errorf("File '%s' not found", filename))
+	s, err := sorter.New(filename)
+	if err != nil {
+		panic(err)
 	}
 
-	// data, err := ioutil.ReadFile(filename)
-	// util.Check(err)
-	// fmt.Println(len(data))
+	if err := s.Sort(); err != nil {
+		panic(err)
+	}
 
-	sorter.NewSorter(filename).Sort()
+	s.AssertSorted()
+}
 
-	// contents, err := ioutil.ReadFile(filename)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// fmt.Print(string(contents))
+func getFlags() (filename string, fileSizeMB int) {
+	flag.StringVar(&filename, "filename", "", "Existing file to be sorted")
+
+	flag.IntVar(&fileSizeMB, "filesize", 0, "Size (MB) of file to be randomly generated and sorted")
+
+	flag.Parse()
+
+	if (filename == "" && fileSizeMB == 0) || (filename != "" && fileSizeMB != 0) {
+		panic(`Usage:
+		file-sorter -filename=<name> # sort the existing file <name>
+		file sorter -filesize=<size> # generate a random file of size <size> MB and sort it`)
+	}
+	return
 }
