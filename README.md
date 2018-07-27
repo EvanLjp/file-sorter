@@ -4,7 +4,7 @@ A command line tool that sorts the lines of large text files.
 
 ## Algorithm
 
-File sorter uses an [external sort](https://en.wikipedia.org/wiki/External_sorting) algorithm in order not to load the whole input file into memory.
+File sorter uses an [external sort  algorithm](https://en.wikipedia.org/wiki/External_sorting) (similar to merge sort) in order not to load the whole input file into memory.
 
 * First the file is read line by line and an index is created in order to know at which byte each line begins.
 * Then, the file is divided into _batches_ of fixed maximal size, each of which containing a few consequtive lines of the file.
@@ -37,12 +37,14 @@ Also such a ratio would not be optimal.
 On a mid-range laptop, the following results were obtained:
 
 | File size (MB) | Max batch size (MB) | Approx time (Sec) |
-|________________|_____________________|___________________|
+|----------------|---------------------|-------------------|
 | 100            | 10                  | 56                |
 | 100            | 100                 | 4                 |
+|                |                     |                   |
 | 1 000          | 10                  | 95                |
 | 1 000          | 100                 | 50                |
 | 1 000          | 1 00                | 68                |
+|                |                     |                   |
 | 10 000         | 1 00                | 1620              |
 
 Note that the max batch size is not the max total memory that the file sorter needs.
