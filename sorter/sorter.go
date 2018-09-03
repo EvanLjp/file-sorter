@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"tig.chaosgroup.com/candidates/bozhin.katsarski/util"
+	"github.com/file-sorter/util"
 )
 
 const defaultMaxBatchSizeB = 1e8 // 100MB

@@ -4,9 +4,9 @@ import (
 	"flag"
 	"log"
 
-	"tig.chaosgroup.com/candidates/bozhin.katsarski/gen"
+	"github.com/file-sorter/gen"
 
-	"tig.chaosgroup.com/candidates/bozhin.katsarski/sorter"
+	"github.com/file-sorter/sorter"
 )
 
 func main() {
