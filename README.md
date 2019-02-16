@@ -1,6 +1,6 @@
 # file-sorter
 
-A command line tool that sorts the lines of large text files.
+A cli tool that sorts files too big to fit in RAM.
 
 ## Algorithm
 
