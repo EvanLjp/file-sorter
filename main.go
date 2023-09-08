@@ -1,9 +1,9 @@
 package main
 
 import (
-	"file-sorter/gen"
-	"file-sorter/sorter"
 	"flag"
+	"github.com/EvanLjp/file-sorter/gen"
+	"github.com/EvanLjp/file-sorter/sorter"
 	"log"
 )
 

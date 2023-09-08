@@ -2,8 +2,8 @@ package sorter
 
 import (
 	"bufio"
-	"file-sorter/util"
 	"fmt"
+	"github.com/EvanLjp/file-sorter/util"
 	"os"
 )
 
