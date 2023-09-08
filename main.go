@@ -1,12 +1,10 @@
 package main
 
 import (
+	"file-sorter/gen"
+	"file-sorter/sorter"
 	"flag"
 	"log"
-
-	"github.com/file-sorter/gen"
-
-	"github.com/file-sorter/sorter"
 )
 
 func main() {

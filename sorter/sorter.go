@@ -2,10 +2,9 @@ package sorter
 
 import (
 	"bufio"
+	"file-sorter/util"
 	"fmt"
 	"os"
-
-	"github.com/file-sorter/util"
 )
 
 const defaultMaxBatchSizeB = 1e8 // 100MB
